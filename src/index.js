@@ -2,21 +2,27 @@ import c3 from "c3";
 
 window.loadChart = function (json) {
   const obj = JSON.parse(json);
-  const data = obj.data;
-  const type = obj.type;
 
+  const productsArray = ["Apples", "Peaches", "Pears", "Bananas"];
+  const { data, type, width, height, colors } = obj;
+  console.log(colors);
   const options = {
     bindto: "#chart",
-    size: { width: 600, height: 400 },
+    size: { width: width, height: height },
     axis: {
       x: { type: "category" },
     },
     data: {
-      colors: {
-        Apples: "#ff0000",
-        Peaches: "#00ff00",
-        Bananas: "#0000ff",
+      onclick: function (dogs) {
+        console.log(dogs);
+        const { index, name } = dogs;
+        const product = productsArray[index];
+        console.log(product);
+        const toSendToFM = { name: name, product: product };
+        console.log(toSendToFM);
+        FileMaker.PerformScript("Chart Click", JSON.stringify(toSendToFM));
       },
+      colors: colors,
       keys: { x: "name", value: ["Jan", "Feb", "Mar"] },
       type: type,
 
